@@ -1,6 +1,6 @@
 # Geofence
 The ultimate geofencing tool
-# Steps to run Server
+## Steps to run Server
 1) Make sure the paths are updated in mypython.py
 2) export FLASK_APP=microblog.py
 3) flask run
