@@ -3,6 +3,7 @@ The ultimate geofencing tool
 ### Dependencies
 For Client
 1) Android Studio for Client application
+
 For Server
 1) Tensorflow
 2) Python flask 
