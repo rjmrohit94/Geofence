@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Coordinates of Sides</h1>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.Latitude.label }}
+            {{ form.Latitude(size=32) }}
+            {% for error in form.Latitude.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+            {{ form.Longitude.label }}
+            {{ form.Longitude(size=32) }}
+            {% for error in form.Longitude.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+    <input type="submit" name="Submit" value="Submit">
+	<input type="submit" name="Train" value="Train">
+	<p>
+	{%for i in range(0, len)%} 
+	{{Latitude[i]}}
+		{{Longitude[i]}}
+		{% endfor %}
+		</p>
+	</form>
+{% endblock %}
