@@ -1,5 +1,7 @@
 # Geofence
 The ultimate geofencing tool
+
+Link to the paper: https://iopscience.iop.org/article/10.1088/1742-6596/1831/1/012017
 ### Dependencies
 For Client
 1) Android Studio for Client application
