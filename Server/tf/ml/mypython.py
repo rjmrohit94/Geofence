@@ -6,6 +6,11 @@ import numpy as np
 from shapely.geometry import Polygon, Point, LineString
 import random
 import csv
+import pathlib
+import os
+
+parent_dir = pathlib.Path(__file__).parent.absolute()
+
 
 def random_point_within(poly):
     min_x, min_y, max_x, max_y = poly.bounds
@@ -19,7 +24,7 @@ def random_point_within(poly):
 def generate_dataset(Completeset):
     poly = Polygon(Completeset)
     min_x, min_y, max_x, max_y = poly.bounds
-    with open('/home/jarvis/Downloads/tf/coord.txt', 'w') as textFile:
+    with open(os.path.join(parent_dir, 'coord.txt'), 'w') as textFile:
         textFile.write(str(min_x) +'\n')
         textFile.write(str(min_y) +'\n')
         textFile.write(str(max_x) +'\n')
@@ -38,7 +43,7 @@ def generate_dataset(Completeset):
     row.insert(0,['Lat Long Out'])
     #print float(row[:][0].split(' ')[0])/165.4279876
     #row = [[str(float((i[0].split(' ')[0])))+' '+ str(float((i[0].split(' ')[1])))+' ' + str(checks[j]) ] for i,j in zip(tmp,range(len(checks)))]
-    with open('/home/jarvis/Downloads/tf/testdata.csv', 'w') as csvFile:
+    with open(os.path.join(parent_dir, 'testdata.csv'), 'w') as csvFile:
         writer = csv.writer(csvFile)
         writer.writerows(row)
     csvFile.close()
@@ -54,13 +59,13 @@ def generate_dataset(Completeset):
     row.insert(0,['Lat Long Out'])
     #print float(row[:][0].split(' ')[0])/165.4279876
     #row = [[str(float((i[0].split(' ')[0])))+' '+ str(float((i[0].split(' ')[1])))+' ' + str(checks[j]) ] for i,j in zip(tmp,range(len(checks)))]
-    with open('/home/jarvis/Downloads/tf/traindata.csv', 'w') as csvFile:
+    with open(os.path.join(parent_dir, 'traindata.csv'), 'w') as csvFile:
         writer = csv.writer(csvFile)
         writer.writerows(row)
     csvFile.close()
 def train_neurons():
-    traindata= pd.read_csv("/home/jarvis/Downloads/tf/traindata.csv",sep=" ")
-    testdata= pd.read_csv("/home/jarvis/Downloads/tf/testdata.csv",sep=" ")
+    traindata= pd.read_csv(os.path.join(parent_dir, 'traindata.csv'),sep=" ")
+    testdata= pd.read_csv(os.path.join(parent_dir, 'testdata.csv'),sep=" ")
     train_features = traindata[['Lat','Long']]
     train_labels = traindata['Out']
     #print(train_labels[:6])
@@ -89,12 +94,12 @@ def train_neurons():
     callbacks = myCallbacks()
     model.fit(train_features,train_labels,epochs =200,callbacks = [callbacks])
     loss,acc=model.evaluate(test_features,test_labels)
-    model.save("/home/jarvis/Downloads/tf/geofence_predictor1.h5")
+    model.save(os.path.join(parent_dir, 'geofence_predictor1.h5'))
     for layer in model.layers:
         weights = layer.get_weights()[0]
         bias=layer.get_weights()[1]
         #print(weights.shape)
-        with open('/home/jarvis/Downloads/tf/coord.txt', 'a+') as fw:
+        with open(model.save(os.path.join(parent_dir, 'coord.txt')), 'a+') as fw:
             for roww in weights:
                 for colw in roww:
                     #print(colw)
@@ -102,7 +107,7 @@ def train_neurons():
         print(bias.shape)
     for layer in model.layers:
         bias=layer.get_weights()[1]
-        with open('/home/jarvis/Downloads/tf/coord.txt', 'a+') as f:
+        with open(os.path.join(parent_dir, 'coord.txt'), 'a+') as f:
             for rowb in bias:
                 #print(rowb)
              #   for col in rowb:

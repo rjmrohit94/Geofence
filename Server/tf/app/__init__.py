@@ -1,8 +1,21 @@
+import os
+from pathlib import Path
 from flask import Flask
-from config import Config
+from flask_mongoengine import MongoEngine
+from mongoengine import connect
+from redis import Redis
+import rq
+from dotenv import dotenv_values
 
 app = Flask(__name__)
-app.config.from_object(Config)
 
-from app import routes
-import mypython
+
+base_path = Path(app.root_path).parent
+# Configurations
+app.config.from_pyfile(os.path.join(base_path, 'settings.py'))
+config = dotenv_values(os.path.join(base_path, '.env'))
+app.redis = Redis.from_url(app.config['REDIS_URL'])
+mongo = MongoEngine(app)
+
+connect(app.config['MONGODB_SETTINGS']['db'], alias=app.config['MONGODB_SETTINGS']['db'],
+        host=app.config['MONGODB_SETTINGS']['host'], port=app.config['MONGODB_SETTINGS']['port'])

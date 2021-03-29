@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  geofence-database:
+    image: mongo # specify image to build container from
+    container_name: geofence_database
+    networks:
+      - geofence-net
+    command: mongod --port 27018
+    ports:
+      - "27018:27018" # specify port forwarding
+
+  redis:
+    image: redis
+    container_name: redis
+    networks:
+      - geofence-net
+
+networks:
+  geofence-net:
+    name: geofence-net
