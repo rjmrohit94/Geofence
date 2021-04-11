@@ -11,3 +11,7 @@ _`pip install -r requirements.txt`_
 Start the flask server
 
 _`python run.py`_
+
+Start the worker
+
+_`python worker.py`_
