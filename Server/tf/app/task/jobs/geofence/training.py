@@ -71,10 +71,8 @@ def write_model_to_file(model, geofence_data):
         weights = layer.get_weights()[0]
         for row in weights:
             for col in row:
-                if col:
-                    geofence_data.write("%s\n" % col)
+                geofence_data.write("%s\n" % col)
     for layer in model.layers:
         bias = layer.get_weights()[1]
         for row in bias:
-            if row:
-                geofence_data.write("%s\n" % row)
+            geofence_data.write("%s\n" % row)
