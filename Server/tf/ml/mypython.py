@@ -112,3 +112,7 @@ def train_neurons():
                 #print(rowb)
              #   for col in rowb:
                 f.write("%s\n" % rowb)
+
+
+if __name__ == '__main__':
+    train_neurons()

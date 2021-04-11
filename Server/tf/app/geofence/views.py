@@ -25,8 +25,8 @@ class GeoFencesApi(Resource):
     def get():
         args = parser.parse_args()
         geo_fence = Geofence.objects
-        if args.get('status') is not None:
-            geo_fence = geo_fence.filter(status=args.get('status'))
+        # if args.get('status') is not None:
+        #     geo_fence = geo_fence.filter(status=args.get('status'))
         geo_fence = geo_fence.paginate(page=args['page'], per_page=args['limit'])
         response = [json.loads(obj.to_json(use_db_field=False)) for obj in geo_fence.items]
         return {
@@ -34,10 +34,10 @@ class GeoFencesApi(Resource):
             "hasPrev": geo_fence.has_prev, "total": geo_fence.total
         }
 
-    def post(self):
+    @staticmethod
+    def post():
         try:
             request_body = request.get_json(force=True)
-            self.set_tree_template(request_body)
             geo_fence = Geofence(**request_body)
             geo_fence.uu_id = str(uuid.uuid4())
             geo_fence = geo_fence.save(validate=True)
@@ -62,7 +62,6 @@ class GeoFenceApi(Resource):
             current_obj = json.loads(geo_fence.to_json(use_db_field=False))
             for key in request_body:
                 current_obj[key] = request_body[key]
-            geo_fence = Geofence(**request_body)
             geo_fence.uu_id = fence_id
             geo_fence.validate()
             geo_fence.update(**request_body)
