@@ -17,6 +17,7 @@ parser = reqparse.RequestParser()
 parser.add_argument('page', type=int, location='args', default=1)
 parser.add_argument('limit', type=int, location='args', default=1000)
 parser.add_argument('status', type=bool, location='args', default=True)
+parser.add_argument('fields', type=str, location='args', default="")
 
 
 class GeoFencesApi(Resource):
@@ -25,8 +26,6 @@ class GeoFencesApi(Resource):
     def get():
         args = parser.parse_args()
         geo_fence = Geofence.objects
-        # if args.get('status') is not None:
-        #     geo_fence = geo_fence.filter(status=args.get('status'))
         geo_fence = geo_fence.paginate(page=args['page'], per_page=args['limit'])
         response = [json.loads(obj.to_json(use_db_field=False)) for obj in geo_fence.items]
         return {
@@ -112,8 +111,16 @@ class GeoFenceApi(Resource):
     @staticmethod
     def get(fence_id):
         try:
-            geo_fence = Geofence.objects.get(uu_id=fence_id).to_json(use_db_field=False)
-            return Response(geo_fence, mimetype=APPLICATION_JSON, status=200)
+            args = parser.parse_args()
+            geo_fence = Geofence.objects.get(uu_id=fence_id)
+            response = json.loads(geo_fence.to_json(use_db_field=False))
+            if args["fields"] != "":
+                fields = args["fields"].split(",")
+                if "geoFenceData" in fields and geo_fence.geoFenceData:
+                    data = geo_fence.geoFenceData.read()
+                    if data:
+                        response["geoFenceData"] = data.decode("utf-8").split("\n")
+            return response, 200
         except DoesNotExist:
             return {"error": ITEM_DOES_NOT_EXIST}, 404
         except Exception as _e:

@@ -3,7 +3,7 @@ import traceback
 from mongoengine import DoesNotExist
 
 from app.geofence.models import Geofence, WrapperRect
-from app.task.jobs.geofence.utils import get_fencing_polygon, build_wrapper_rect, random_point_within
+from app.task.jobs.geofence.utils import get_fencing_polygon, random_point_within
 
 
 def retrieve_and_clear_model(geofence_id):
