@@ -24,7 +24,7 @@ def retrieve_and_clear_model(geofence_id):
 
 class CustomCallback(tf.keras.callbacks.Callback):
     def on_epoch_end(self, epochs, logs=None):
-        if logs and logs.get('accuracy') >= 0.97:
+        if (logs.get('acc') is not None and logs.get('acc') >= 0.97):
             self.model.stop_training = True
             print(" Reached 97% Accuracy!")
 
